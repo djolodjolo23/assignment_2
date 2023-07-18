@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Scrollable List App',
+      title: 'ToDo List App',
       home: ScrollableListScreen(),
     );
   }
@@ -17,17 +17,19 @@ class MyApp extends StatelessWidget {
 class ScrollableListScreen extends StatefulWidget {
   const ScrollableListScreen({super.key});
   @override
-  _ScrollableListScreenState createState() => _ScrollableListScreenState();
+  createState() => _ScrollableListScreenState();
 }
 
 class _ScrollableListScreenState extends State<ScrollableListScreen> {
-  List<String> itemList = [];
+  List<String> listWithItems = [];
   String textFieldText = '';
+  TextEditingController textEditingController = TextEditingController();
 
   void addItemToList() {
     if (textFieldText.isNotEmpty) {
       setState(() {
-        itemList.add(textFieldText);
+        listWithItems.add(textFieldText);
+        textEditingController.clear();
         textFieldText = '';
       });
     }
@@ -35,7 +37,7 @@ class _ScrollableListScreenState extends State<ScrollableListScreen> {
 
   void removeItemFromList(String item) {
     setState(() {
-      itemList.remove(item);
+      listWithItems.remove(item);
     });
   }
 
@@ -48,6 +50,7 @@ class _ScrollableListScreenState extends State<ScrollableListScreen> {
       body: Column(
         children: [
           TextField(
+            controller: textEditingController,
             onChanged: (value) {
               setState(() {
                 textFieldText = value;
@@ -55,9 +58,6 @@ class _ScrollableListScreenState extends State<ScrollableListScreen> {
             },
             onSubmitted: (value) {
               addItemToList();
-              setState(() {
-                textFieldText = ''; // Reset the text field after submitting
-              });
             },
             decoration: const InputDecoration(
               labelText: 'Enter ToDo Item',
@@ -75,9 +75,9 @@ class _ScrollableListScreenState extends State<ScrollableListScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: itemList.length,
+              itemCount: listWithItems.length,
               itemBuilder: (context, index) {
-                final item = itemList[index];
+                final item = listWithItems[index];
                 return ListTile(
                   title: Text(item),
                   onTap: () {
