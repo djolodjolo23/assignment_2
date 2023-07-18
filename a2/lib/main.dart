@@ -27,11 +27,42 @@ class _ScrollableListScreenState extends State<ScrollableListScreen> {
 
   void addItemToList() {
     if (textFieldText.isNotEmpty) {
-      setState(() {
-        listWithItems.add(textFieldText);
-        textEditingController.clear();
-        textFieldText = '';
-      });
+      bool isItemAlreadyInTheList = listWithItems.contains(textFieldText);
+      if (isItemAlreadyInTheList) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Duplicate item'),
+                content: const Text(
+                    'This item is already in the list. Are you sure you want to add it again?'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        setState(() {
+                          listWithItems.add(textFieldText);
+                          textEditingController.clear();
+                          textFieldText = '';
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Yes')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('No',
+                          style: TextStyle(fontWeight: FontWeight.bold)))
+                ],
+              );
+            });
+      } else {
+        setState(() {
+          listWithItems.add(textFieldText);
+          textEditingController.clear();
+          textFieldText = '';
+        });
+      }
     }
   }
 
