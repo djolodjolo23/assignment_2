@@ -80,10 +80,14 @@ class _ScrollableListScreenState extends State<ScrollableListScreen> {
                 final item = listWithItems[index];
                 return ListTile(
                   title: Text(item),
-                  onTap: () {
-                    removeItemFromList(item);
-                    textEditingController.text = item;
-                  },
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      removeItemFromList(item);
+                      textEditingController.text = item;
+                      textFieldText = item;
+                    },
+                  ),
                 );
               },
             ),
