@@ -82,6 +82,7 @@ class _ScrollableListScreenState extends State<ScrollableListScreen> {
                   title: Text(item),
                   onTap: () {
                     removeItemFromList(item);
+                    textEditingController.text = item;
                   },
                 );
               },
